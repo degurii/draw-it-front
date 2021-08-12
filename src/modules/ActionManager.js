@@ -1,21 +1,31 @@
 const registry = {},
     actionHistory = [];
 
+const runAllHistory = () => {
+    actionHistory.forEach(action => action.render());
+};
 export default {
     registry: (type, component) => {
         registry[type] = component;
     },
-    makeNewAction: (ctx, type, data) => {
-        return new registry[type](ctx, type, data);
+    createNewAction: (ctx, type, data) => {
+        const component = registry[type];
+        if (!component) {
+            throw new Error(`Component type ${type} is not registered.`);
+        }
+        return new component(ctx, type, data);
     },
     addAction: action => {
         actionHistory.push(action);
     },
     undo: () => {
-        actionHistory.pop();
-        this.runAll();
+        if (actionHistory.length) {
+            console.log(actionHistory);
+            actionHistory.pop();
+            runAllHistory();
+        }
     },
-    runAll: () => {
-        actionHistory.forEach(action => action.render());
+    existHistory: () => {
+        return actionHistory.length > 0;
     },
 };

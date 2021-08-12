@@ -31,20 +31,22 @@ const menuBar = document.querySelector('.menu-bar');
 
 webSocket.onmessage = event => {
     const { type, data } = JSON.parse(event.data);
-    const action = ActionManager.makeNewAction(ctx, type, data);
+    const action = ActionManager.createNewAction(ctx, type, data);
     action.render(canvas.getContext('2d'));
 };
 
-// 브라우저 너비별 캔버스 크기 조정 (test)
+// 브라우저 너비별 캔버스 크기 조정 (임시)
 const rootElement = document.documentElement;
 const FRAME_PADDING = 30;
 const canvasWidth = 3840,
     canvasHeight = 2160;
 const setCanvasScaleRatio = (frameHeight, frameWidth) => {
-    const heightRatio = (frameHeight - 2 * FRAME_PADDING) / canvasHeight,
-        widthRatio = (frameWidth - 2 * FRAME_PADDING) / canvasWidth;
-    const newRatio = Math.min(heightRatio, widthRatio);
-    rootElement.style.setProperty('--scale-ratio', newRatio.toString());
+    window.requestAnimationFrame(() => {
+        const heightRatio = (frameHeight - 2 * FRAME_PADDING) / canvasHeight,
+            widthRatio = (frameWidth - 2 * FRAME_PADDING) / canvasWidth;
+        const newRatio = Math.min(heightRatio, widthRatio);
+        rootElement.style.setProperty('--scale-ratio', newRatio.toString());
+    });
 };
 window.addEventListener('DOMContentLoaded', () => {
     setCanvasScaleRatio(
@@ -57,4 +59,11 @@ window.addEventListener('resize', () => {
         canvasContainer.offsetHeight,
         canvasContainer.offsetWidth,
     );
+});
+
+// undo (임시)
+const undoButton = document.body.querySelector('.toolbar__icon--undo');
+undoButton.addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ActionManager.undo();
 });

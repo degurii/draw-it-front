@@ -15,7 +15,7 @@ export default (ctx, webSocket) => {
             // 마우스 왼쪽 클릭이 아닌 경우
             return;
         }
-        newAction = ActionManager.makeNewAction(ctx, state.currentActionType);
+        newAction = ActionManager.createNewAction(ctx, state.currentActionType);
 
         state.isDrawing = true;
         const currentPosition = {
