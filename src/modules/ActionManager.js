@@ -17,5 +17,5 @@ export default {
     },
     runAll: () => {
         actionHistory.forEach(action => action.render());
-    }
-}
+    },
+};

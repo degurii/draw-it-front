@@ -1,7 +1,7 @@
 import ActionManager from './ActionManager';
 
 export default (ctx, webSocket) => {
-    ctx.lineCap= 'round';
+    ctx.lineCap = 'round';
     ctx.lineWidth = 20;
 
     let newAction = null;
@@ -11,7 +11,7 @@ export default (ctx, webSocket) => {
         isDrawing: false,
     };
     const onMouseDownHandler = e => {
-        if(e.button !== 0) {
+        if (e.button !== 0) {
             // 마우스 왼쪽 클릭이 아닌 경우
             return;
         }
@@ -26,7 +26,7 @@ export default (ctx, webSocket) => {
         newAction.setup(currentPosition);
     };
     const onMouseMoveHandler = e => {
-        if(!state.isDrawing || !newAction) {
+        if (!state.isDrawing || !newAction) {
             return;
         }
         const currentPosition = {
@@ -35,8 +35,9 @@ export default (ctx, webSocket) => {
         };
         newAction.onMove(currentPosition);
     };
-    const onMouseUpHandler = e => {
-        if(!state.isDrawing || !newAction) {
+
+    const onMouseUpHandler = () => {
+        if (!state.isDrawing || !newAction) {
             return;
         }
         state.isDrawing = false;
@@ -61,5 +62,5 @@ export default (ctx, webSocket) => {
         onMouseDownHandler,
         onMouseMoveHandler,
         onMouseUpHandler,
-    }
+    };
 };
