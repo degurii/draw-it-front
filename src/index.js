@@ -1,10 +1,43 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
+import { createGlobalStyle } from 'styled-components';
+import reset from 'styled-reset';
+
+const GlobalStyle = createGlobalStyle`
+  ${reset}
+  html {
+    font-size: 62.5%;
+  }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 1.6rem;
+    height: 100vh;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  }
+
+  *, *::after, *::before {
+    box-sizing: border-box;
+  }
+  
+  h1 {
+    font-size: 2.4rem;
+    font-weight: bold;
+  }
+`;
 
 ReactDOM.render(
     <React.StrictMode>
+        <GlobalStyle />
         <App />
     </React.StrictMode>,
     document.getElementById('root'),
