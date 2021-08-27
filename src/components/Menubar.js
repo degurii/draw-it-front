@@ -8,9 +8,33 @@ const MenubarContainer = styled.div`
     width: 6rem;
     height: calc(100% - 4.4rem);
     border-right: 1px solid ${({ theme }) => theme.colors.lineGray};
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 `;
 
-const MenubarItem = styled.li``;
+const MenubarItem = styled.li`
+    width: 100%;
+    height: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    &:hover {
+        background-color: ${({ theme }) => theme.colors.buttonHover};
+    }
+    &:active {
+        background-color: ${({ theme }) => theme.colors.buttonActive};
+    }
+    svg {
+        font-size: 2.4rem;
+    }
+`;
 const Menubar = props => {
     return (
         <MenubarContainer>
