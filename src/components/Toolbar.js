@@ -8,9 +8,9 @@ const ToolbarContainer = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
-    height: 5rem;
-    border: 1px solid blue;
-
+    height: 4.4rem;
+    padding-left: 1rem;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.lineGray};
     ul {
         display: flex;
         align-items: center;
@@ -23,22 +23,37 @@ const ToolbarItem = styled.li`
     cursor: pointer;
     justify-content: center;
     align-items: center;
-    width: 4rem;
-    height: 3.2rem;
-    border: 1px solid black;
+    width: 4.8rem;
+    height: 3.6rem;
     border-radius: 2px;
-    margin: 0.2rem;
     font-size: 2rem;
+    margin: 0 0.1rem;
 
+    &:hover {
+        background-color: ${({ theme }) => theme.colors.buttonHover};
+    }
     &:active {
-        background-color: black;
+        background-color: ${({ theme }) => theme.colors.buttonActive};
+    }
+
+    svg {
+        font-size: 1.8rem;
     }
 `;
-
+const MdBorderColorIcon = styled(MdBorderColor)`
+    path:last-child {
+        fill-opacity: 1;
+        fill: ${props => props.currentColor};
+    }
+`;
+const MdLineWeightIcon = styled(MdLineWeight)`
+    transform: rotate(180deg);
+`;
 const Separator = styled.li`
     width: 0;
-    height: 100%;
-    border-right: 1px solid black;
+    height: 80%;
+    border-right: 1px solid ${({ theme }) => theme.colors.lineGray};
+    margin: 0 0.6rem;
 `;
 
 const Toolbar = props => {
@@ -53,10 +68,10 @@ const Toolbar = props => {
                 </ToolbarItem>
                 <Separator />
                 <ToolbarItem>
-                    <MdLineWeight />
+                    <MdLineWeightIcon />
                 </ToolbarItem>
                 <ToolbarItem>
-                    <MdBorderColor />
+                    <MdBorderColorIcon currentColor={'red'} />
                 </ToolbarItem>
                 <Separator />
                 <ToolbarItem>

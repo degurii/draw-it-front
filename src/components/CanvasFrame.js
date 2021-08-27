@@ -7,8 +7,10 @@ const CanvasContainer = styled.div`
     justify-content: center;
     align-items: center;
 
+    background-color: ${({ theme }) => theme.colors.backgroundGray};
+
     width: calc(100% - 6rem);
-    border: 1px solid magenta;
+
     canvas {
         outline: 2px solid gray;
     }
