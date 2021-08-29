@@ -7,7 +7,7 @@ import { FaPen, FaEraser, FaRegSquare } from 'react-icons/fa';
 const MenubarContainer = styled.div`
     width: 6rem;
     height: calc(100% - 4.4rem);
-    border-right: 1px solid ${({ theme }) => theme.colors.lineGray};
+    border-right: 1px solid ${props => props.theme.color.lineGray};
 
     ul {
         display: flex;
@@ -26,15 +26,18 @@ const MenubarItem = styled.li`
     cursor: pointer;
 
     &:hover {
-        background-color: ${({ theme }) => theme.colors.buttonHover};
+        background-color: ${props => props.theme.color.hoverGray};
     }
+
     &:active {
-        background-color: ${({ theme }) => theme.colors.buttonActive};
+        background-color: ${props => props.theme.color.activeGray};
     }
+
     svg {
         font-size: 2.4rem;
     }
 `;
+
 const Menubar = props => {
     return (
         <MenubarContainer>

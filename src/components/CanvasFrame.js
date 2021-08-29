@@ -7,7 +7,7 @@ const CanvasContainer = styled.div`
     justify-content: center;
     align-items: center;
 
-    background-color: ${({ theme }) => theme.colors.backgroundGray};
+    background-color: ${props => props.theme.color.backgroundGray};
 
     width: calc(100% - 6rem);
 

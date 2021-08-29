@@ -6,7 +6,7 @@ import Toolbar from './Toolbar';
 import Menubar from './Menubar';
 import CanvasFrame from './CanvasFrame';
 
-const MainStyled = styled.main`
+const MainContainer = styled.main`
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -14,11 +14,11 @@ const MainStyled = styled.main`
 `;
 const Main = props => {
     return (
-        <MainStyled>
+        <MainContainer>
             <Toolbar />
             <Menubar />
             <CanvasFrame />
-        </MainStyled>
+        </MainContainer>
     );
 };
 
