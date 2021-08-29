@@ -1,17 +1,35 @@
-html {
+import { createGlobalStyle } from 'styled-components';
+import reset from 'styled-reset';
+
+export default createGlobalStyle`
+  ${reset}
+  html {
     font-size: 62.5%;
-}
-body {
+  }
+
+  body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: ${props => props.theme.color.black};
     font-size: 1.6rem;
-}
+    height: 100vh;
+  }
 
-code {
+  code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+  }
+
+  *, *::after, *::before {
+    box-sizing: border-box;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    font-weight: bold;
+  }
+`;
