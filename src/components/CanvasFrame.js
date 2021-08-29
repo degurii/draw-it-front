@@ -12,7 +12,8 @@ const CanvasContainer = styled.div`
     width: calc(100% - 6rem);
 
     canvas {
-        outline: 2px solid gray;
+        outline: 2px solid ${props => props.theme.color.lineGray};
+        background-color: ${props => props.theme.color.white};
     }
 `;
 const CanvasFrame = props => {
