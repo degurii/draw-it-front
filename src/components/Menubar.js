@@ -6,7 +6,7 @@ import { FaPen, FaEraser, FaRegSquare } from 'react-icons/fa';
 
 const MenubarContainer = styled.div`
     width: 6rem;
-    height: calc(100% - 4.4rem);
+    height: 100%;
     border-right: 1px solid ${props => props.theme.color.lineGray};
 
     ul {

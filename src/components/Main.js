@@ -8,16 +8,25 @@ import CanvasFrame from './CanvasFrame';
 
 const MainContainer = styled.main`
     display: flex;
-    flex-wrap: wrap;
+
+    //flex-wrap: wrap;
+    flex-flow: wrap column;
     width: 100%;
-    height: calc(100vh - 6rem);
+    height: calc(100% - 6rem);
+`;
+const DrawContainer = styled.div`
+    display: flex;
+    width: 100%;
+    height: calc(100% - 4.4rem);
 `;
 const Main = props => {
     return (
         <MainContainer>
             <Toolbar />
-            <Menubar />
-            <CanvasFrame />
+            <DrawContainer>
+                <Menubar />
+                <CanvasFrame />
+            </DrawContainer>
         </MainContainer>
     );
 };
