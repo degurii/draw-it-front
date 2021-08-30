@@ -16,7 +16,6 @@ export default createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
     color: ${props => props.theme.color.black};
     font-size: 1.6rem;
-    height: 100vh;
   }
 
   code {
