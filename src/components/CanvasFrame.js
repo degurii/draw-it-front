@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 import {
     CANVAS_FRAME_PADDING,
@@ -23,7 +23,7 @@ const CanvasContainer = styled.div`
     }
 `;
 
-const CanvasFrame = props => {
+const CanvasFrame = ({ penWidth, penColor }) => {
     const [canvasScale, setCanvasScale] = useState(0.1);
     const [isDrawing, setIsDrawing] = useState(false);
 
@@ -32,6 +32,11 @@ const CanvasFrame = props => {
     const contextRef = useRef();
     const actionRef = useRef();
 
+    const theme = useTheme();
+    useEffect(() => {
+        contextRef.current.lineWidth = penWidth;
+        contextRef.current.strokeStyle = theme.color[penColor];
+    }, [penWidth, penColor, theme]);
     const updateCanvasScale = () => {
         const { offsetHeight, offsetWidth } = frameRef.current;
         const heightScale =
@@ -41,12 +46,8 @@ const CanvasFrame = props => {
         setCanvasScale(Math.min(widthScale, heightScale));
     };
     const drawLine = (from, to) => {
-        console.log('from:', from);
-        console.log('to:', to);
-        // const ctx = contextRef.current;
-        const ctx = canvasRef.current.getContext('2d');
+        const ctx = contextRef.current;
         ctx.lineCap = 'round';
-        ctx.lineWidth = 20;
         ctx.beginPath();
         ctx.moveTo(from.x, from.y);
         ctx.lineTo(to.x, to.y);
@@ -76,11 +77,9 @@ const CanvasFrame = props => {
 
     const onMouseMoveHandler = e => {
         const action = actionRef.current;
-        console.log('mouse move before');
         if (!isDrawing || !action) {
             return;
         }
-        console.log('mouse move');
         const currentCoord = {
             x: e.nativeEvent.offsetX,
             y: e.nativeEvent.offsetY,
@@ -113,6 +112,9 @@ const CanvasFrame = props => {
     );
 };
 
-CanvasFrame.propTypes = {};
+CanvasFrame.propTypes = {
+    penWidth: PropTypes.number.isRequired,
+    penColor: PropTypes.string.isRequired,
+};
 
 export default CanvasFrame;
