@@ -21,6 +21,7 @@ const DrawContainer = styled.div`
     height: calc(100% - 4.4rem);
 `;
 const Main = props => {
+    const [currentAction, setCurrentAction] = useState('pen');
     const [penWidth, setPenWidth] = useState(PEN_WIDTHS[0]);
     const [penColor, setPenColor] = useState(PEN_COLORS[0]);
     const onSelectWidth = width => {
@@ -29,6 +30,11 @@ const Main = props => {
     const onSelectColor = color => {
         setPenColor(color);
     };
+    const onSelectAction = action => {
+        setCurrentAction(action);
+    };
+    const isSelectedMenu = action => action === currentAction;
+
     return (
         <MainContainer>
             <Toolbar
@@ -38,8 +44,15 @@ const Main = props => {
                 onSelectColor={onSelectColor}
             />
             <DrawContainer>
-                <Menubar />
-                <CanvasFrame penWidth={penWidth} penColor={penColor} />
+                <Menubar
+                    onSelectAction={onSelectAction}
+                    isSelectedMenu={isSelectedMenu}
+                />
+                <CanvasFrame
+                    currentAction={currentAction}
+                    penWidth={penWidth}
+                    penColor={penColor}
+                />
             </DrawContainer>
         </MainContainer>
     );
