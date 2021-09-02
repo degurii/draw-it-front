@@ -6,7 +6,7 @@ import { MdLineWeight, MdBorderColor } from 'react-icons/md';
 
 import PenWidthMenuDetail from './PenWidthMenuDetail';
 import PenColorMenuDetail from './PenColorMenuDetail';
-import useDeactivate from '../../hooks/useDeactivate';
+import useDeactivate from '../../hooks/useDeactivateComponent';
 
 const ToolbarContainer = styled.div`
     display: flex;
