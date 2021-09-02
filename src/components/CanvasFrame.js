@@ -7,6 +7,8 @@ import {
     CANVAS_WIDTH,
     CANVAS_HEIGHT,
 } from '../constants';
+import useActionManager from '../hooks/useActionManager';
+import MouseDrawingAction from '../modules/actions/MouseDrawingAction';
 
 const CanvasContainer = styled.div`
     display: flex;
@@ -23,20 +25,16 @@ const CanvasContainer = styled.div`
     }
 `;
 
-const CanvasFrame = ({ penWidth, penColor }) => {
+const CanvasFrame = ({ currentAction, penWidth, penColor }) => {
     const [canvasScale, setCanvasScale] = useState(0.1);
     const [isDrawing, setIsDrawing] = useState(false);
-
-    const frameRef = useRef();
-    const canvasRef = useRef();
-    const contextRef = useRef();
-    const actionRef = useRef();
+    const [canUndo, canRedo, actionManager] = useActionManager();
 
     const theme = useTheme();
-    useEffect(() => {
-        contextRef.current.lineWidth = penWidth;
-        contextRef.current.strokeStyle = theme.color[penColor];
-    }, [penWidth, penColor, theme]);
+    const frameRef = useRef();
+    const canvasRef = useRef();
+    const actionRef = useRef();
+
     const updateCanvasScale = () => {
         const { offsetHeight, offsetWidth } = frameRef.current;
         const heightScale =
@@ -45,53 +43,64 @@ const CanvasFrame = ({ penWidth, penColor }) => {
                 (offsetWidth - 2 * CANVAS_FRAME_PADDING) / CANVAS_WIDTH;
         setCanvasScale(Math.min(widthScale, heightScale));
     };
-    const drawLine = (from, to) => {
-        const ctx = contextRef.current;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(from.x, from.y);
-        ctx.lineTo(to.x, to.y);
-        ctx.stroke();
-    };
-    useLayoutEffect(() => {
-        contextRef.current = canvasRef.current.getContext('2d');
 
+    useLayoutEffect(() => {
         updateCanvasScale();
         const onResizeHandler = () => updateCanvasScale();
         window.addEventListener('resize', onResizeHandler);
         return () => window.removeEventListener('resize', onResizeHandler);
     }, []);
+
+    useEffect(() => {
+        actionManager.registry('pen', MouseDrawingAction);
+        actionManager.registry('eraser', MouseDrawingAction);
+    }, []);
+
+    useEffect(() => {
+        const ctx = canvasRef.current.getContext('2d');
+        ctx.lineWidth = penWidth;
+        ctx.strokeStyle = theme.color[penColor];
+        ctx.lineCap = 'round';
+    }, [penWidth, penColor]);
+
     const onMouseDownHandler = e => {
         if (e.button !== 0) {
             return;
         }
+        const ctx = canvasRef.current.getContext('2d');
         setIsDrawing(true);
-        actionRef.current = { data: [] };
-        const currentCoord = {
+        const newAction = actionManager.createAction(
+            currentAction,
+            penWidth,
+            penColor,
+        );
+        const currentPosition = {
             x: e.nativeEvent.offsetX,
             y: e.nativeEvent.offsetY,
         };
-        drawLine(currentCoord, currentCoord);
-        actionRef.current.data.push(currentCoord);
+        newAction.setup(ctx, currentPosition);
+        actionRef.current = newAction;
     };
 
     const onMouseMoveHandler = e => {
-        const action = actionRef.current;
-        if (!isDrawing || !action) {
-            return;
-        }
-        const currentCoord = {
-            x: e.nativeEvent.offsetX,
-            y: e.nativeEvent.offsetY,
-        };
-        const dataLen = action.data.length;
-        drawLine(action.data[dataLen - 1], currentCoord);
-        action.data.push(currentCoord);
-    };
-    const onMouseUpHandler = e => {
+        const ctx = canvasRef.current.getContext('2d');
         if (!isDrawing || !actionRef.current) {
             return;
         }
+        const currentPosition = {
+            x: e.nativeEvent.offsetX,
+            y: e.nativeEvent.offsetY,
+        };
+        actionRef.current.onMove(ctx, currentPosition);
+    };
+    const onMouseUpHandler = e => {
+        const ctx = canvasRef.current.getContext('2d');
+        if (!isDrawing || !actionRef.current) {
+            return;
+        }
+        actionRef.current.finishMove();
+        actionManager.addAction(actionRef.current);
+
         setIsDrawing(false);
         actionRef.current = null;
     };
@@ -113,6 +122,7 @@ const CanvasFrame = ({ penWidth, penColor }) => {
 };
 
 CanvasFrame.propTypes = {
+    currentAction: PropTypes.string.isRequired,
     penWidth: PropTypes.number.isRequired,
     penColor: PropTypes.string.isRequired,
 };
