@@ -21,6 +21,8 @@ export default class extends Action {
     }
 
     render(ctx) {
+        ctx.lineWidth = this.thickness;
+        ctx.strokeStyle = this.color;
         this.data.forEach((point, i, data) => {
             const from = data[i && i - 1];
             this.drawLine(ctx, from, point);

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+import useDrawManager from '../hooks/useDrawManager';
 
 import Toolbar from './Toolbar/Toolbar';
 import Menubar from './Menubar';
@@ -21,9 +23,11 @@ const DrawContainer = styled.div`
     height: calc(100% - 4.4rem);
 `;
 const Main = props => {
+    const [drawManager, canvasRef, canUndo, canRedo] = useDrawManager();
     const [currentAction, setCurrentAction] = useState('pen');
     const [penWidth, setPenWidth] = useState(PEN_WIDTHS[0]);
     const [penColor, setPenColor] = useState(PEN_COLORS[0]);
+
     const onSelectWidth = width => {
         setPenWidth(width);
     };
@@ -38,8 +42,12 @@ const Main = props => {
     return (
         <MainContainer>
             <Toolbar
+                drawManager={drawManager}
+                canvasRef={canvasRef}
                 penWidth={penWidth}
                 penColor={penColor}
+                canUndo={canUndo}
+                canRedo={canRedo}
                 onSelectWidth={onSelectWidth}
                 onSelectColor={onSelectColor}
             />
@@ -49,9 +57,11 @@ const Main = props => {
                     isSelectedMenu={isSelectedMenu}
                 />
                 <CanvasFrame
+                    drawManager={drawManager}
                     currentAction={currentAction}
                     penWidth={penWidth}
                     penColor={penColor}
+                    ref={canvasRef}
                 />
             </DrawContainer>
         </MainContainer>
