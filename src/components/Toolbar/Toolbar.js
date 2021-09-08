@@ -68,17 +68,32 @@ const Separator = styled.li`
     margin: 0 0.6rem;
 `;
 
-const Toolbar = ({ penWidth, penColor, onSelectWidth, onSelectColor }) => {
+const Toolbar = ({
+    drawManager,
+    penWidth,
+    penColor,
+    onSelectWidth,
+    onSelectColor,
+}) => {
     const [widthMenuRef, isWidthMenuActive] = useDeactivate(false);
     const [colorMenuRef, isColorMenuActive] = useDeactivate(false);
 
+    const onUndo = () => {
+        drawManager.undo();
+    };
+    const onRedo = () => {
+        drawManager.redo();
+    };
+    const onClear = () => {
+        drawManager.clear();
+    };
     return (
         <ToolbarContainer>
             <ul>
-                <ToolbarItem>
+                <ToolbarItem onClick={onUndo}>
                     <FaUndoAlt />
                 </ToolbarItem>
-                <ToolbarItem>
+                <ToolbarItem onClick={onRedo}>
                     <FaRedoAlt />
                 </ToolbarItem>
                 <Separator />
@@ -100,7 +115,7 @@ const Toolbar = ({ penWidth, penColor, onSelectWidth, onSelectColor }) => {
                     />
                 </ToolbarItem>
                 <Separator />
-                <ToolbarItem>
+                <ToolbarItem onClick={onClear}>
                     <FaTrashAlt />
                 </ToolbarItem>
             </ul>
@@ -109,10 +124,13 @@ const Toolbar = ({ penWidth, penColor, onSelectWidth, onSelectColor }) => {
 };
 
 Toolbar.propTypes = {
+    drawManager: PropTypes.object.isRequired,
     penWidth: PropTypes.number.isRequired,
     penColor: PropTypes.string.isRequired,
     onSelectWidth: PropTypes.func.isRequired,
     onSelectColor: PropTypes.func.isRequired,
+    canUndo: PropTypes.bool,
+    canRedo: PropTypes.bool,
 };
 
 export default Toolbar;
